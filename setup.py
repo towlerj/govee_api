@@ -35,11 +35,6 @@ setup(
         'Topic :: Home Automation'
     ],
     description="Simple and minimal Govee Home API client",
-    entry_points={
-        'console_scripts': [
-            'govee-api=govee-api.cli:main',
-        ],
-    },
     install_requires=requirements,
     license="Apache Software License",
     long_description=readme + '\n\n' + history,
