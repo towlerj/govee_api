@@ -63,15 +63,15 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/govee-api.md
-	rm -f docs/modules.md
+	rm -f docs/govee-api.rst
+	rm -f docs/modules.rst
 	sphinx-apidoc -o docs/ govee-api
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
 servedocs: docs ## compile the docs watching for changes
-	watchmedo shell-command -p '*.md' -c '$(MAKE) -C docs html' -R -D .
+	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: dist ## package and upload a release
 	twine upload dist/*
