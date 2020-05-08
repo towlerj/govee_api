@@ -22,7 +22,7 @@ deploy:
   distributions: sdist bdist_wheel
   user: thomasreiser
   password:
-    secure: $PIPY_PASSWORD
+    secure: $PYPI_PASSWORD
   on:
     tags: true
     repo: thomasreiser/govee-api
