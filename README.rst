@@ -23,7 +23,7 @@ Govee API
 Simple and minimal Govee Home API client
 
 
-* Free software: MIT license
+* Free software: Apache 2.0 License
 * Documentation: https://govee-api.readthedocs.io.
 
 
