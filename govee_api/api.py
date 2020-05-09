@@ -1,4 +1,5 @@
-import inspect
+import govee_api.device_factory as dev_factory
+
 import requests
 import time
 import uuid
@@ -7,10 +8,8 @@ import jwt
 import pathlib
 import os
 import ssl
-import abc
 import AWSIoTPythonSDK.MQTTLib
 import json
-import colour
 
 
 
@@ -274,7 +273,7 @@ class Govee(object):
 
             if identifier in self.__devices.keys():
                 device = self.__devices[identifier]
-                device.name = name
+                device._name = name
             else:
                 device_factory = self.__get_device_factory(sku)
                 if not device_factory:
@@ -298,11 +297,11 @@ class Govee(object):
         # Extract the type id/SKU and map it to device class
         type_id = sku[1:3]
         if type_id == '60':
-            return _GoveeBulbFactory()
+            return dev_factory._GoveeBulbFactory()
         elif type_id == '61':
-            return _GoveeLedStripFactory()
+            return dev_factory._GoveeLedStripFactory()
         elif type_id == '70':
-            return _GoveeStringLightFactory()
+            return dev_factory._GoveeStringLightFactory()
         else:
             return None
 
@@ -364,7 +363,6 @@ class Govee(object):
         if not 'state' in raw_json:
             return
         state = raw_json['state']
-        print(state)
 
         # Get device
         device_identifer = state['device']
@@ -445,284 +443,3 @@ class Govee(object):
         """ Build the API server URL for outgoing requests """
 
         return '{}://{}{}'.format(_GOVEE_API_PROTOCOL, _GOVEE_API_HOST, url_path)
-
-
-class _AbstractGoveeDeviceFactory(abc.ABC):
-    """ Declare an interface for operations that create abstract Govee devices """
-
-    @abc.abstractmethod
-    def build(self, govee, identifier, topic, sku, name, connected):
-        """ Build Govee device """
-
-        pass
-
-
-class _GoveeBulbFactory(_AbstractGoveeDeviceFactory):
-    """ Implement the operations to build Govee bulb devices """
-
-    def build(self, govee, identifier, topic, sku, name, connected):
-        if sku == 'H6085':
-            return GoveeWhiteBulb(govee, identifier, topic, sku, name, connected)
-        else:
-            return GoveeBulb(govee, identifier, topic, sku, name, connected)
-
-
-class _GoveeLedStripFactory(_AbstractGoveeDeviceFactory):
-    """ Implement the operations to build Govee LED strip devices """
-
-    def build(self, govee, identifier, topic, sku, name, connected):
-        return GoveeLedStrip(govee, identifier, topic, sku, name, connected)
-
-
-class _GoveeStringLightFactory(_AbstractGoveeDeviceFactory):
-    """ Implement the operations to build Govee string light devices """
-
-    def build(self, govee, identifier, topic, sku, name, connected):
-        return GoveeStringLight(govee, identifier, topic, sku, name, connected)
-
-
-class GoveeDevice(object):
-    """ Govee Smart device """
-    
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee device """
-
-        super(GoveeDevice, self).__init__()
-
-        self.__govee = govee
-        self.__identifier = identifier
-        self.__topic = topic
-        self.__sku = sku
-        self.__name = name
-        self.__connected = connected
-
-    @property
-    def identifier(self):
-        """ Gets the device identifier """
-
-        return self.__identifier
-
-    @property
-    def _topic(self):
-        """ Gets the device topic """
-
-        return self.__topic
-
-    @property
-    def sku(self):
-        """ Gets the device SKU """
-
-        return self.__sku
-
-    @property
-    def name(self):
-        """ Gets the device name """
-
-        if not self.__name: # Should never happen, but..
-            return '<no name> {} @ {}'.format(self.__sku, self.__identifier)
-        else:
-            return self.__name
-
-    @property
-    def connected(self):
-        """ Gets if the device is connected with the Cloud """
-
-        return self.__connected
-
-    def _update_state(self, state):
-        """ Update device state """
-
-        conn = state['connected']
-        if isinstance(conn, bool):
-            self.__connected = conn
-        elif conn == 'true':
-            self.__connected = True
-        elif conn == 'false':
-            self.__connected = False
-        else:
-            self.__connected = None
-
-    def _publish_command(self, command, data):
-        """ Build command to control Govee Smart device """
-
-        self.__govee._publish_payload(self, command, data)
-
-
-class ToggleableGoveeDevice(GoveeDevice):
-    """ Toggleable Govee Smart device """
-    
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new toggleable Govee device """
-
-        super(ToggleableGoveeDevice, self).__init__(govee, identifier, topic, sku, name, connected)
-
-        self.__on = None
-    
-    @property
-    def on(self):
-        """ Gets if the device is on or off """
-
-        return self.__on
-
-    @on.setter
-    def on(self, val):
-        """ Turns the device on or off """
-
-        self.__turn(val)
-
-    def toggle(self):
-        """ Toggles the device status """
-
-        self.__turn(not self.on)
-
-    def __turn(self, status):
-        """ Turn the device on or off """
-
-        self._publish_command('turn', {
-            'val': status
-        })
-
-    def _update_state(self, state):
-        """ Update device state """
-
-        super(ToggleableGoveeDevice, self)._update_state(state)
-
-        self.__on = state['onOff'] == 1
-
-
-class GoveeLight(ToggleableGoveeDevice):
-    """ Represents a Govee light of any type """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new abstract Govee light device """
-
-        super(GoveeLight, self).__init__(govee, identifier, topic, sku, name, connected)
-
-        self.__brightness = None
-
-    def __fix_brightness(self, brightness):
-        fixed = 0
-        if brightness:
-            fixed = max(min(brightness, 255), 0)
-        return fixed
-
-    @property
-    def brightness(self):
-        """ Gets the light brightness  """
-
-        return self.__brightness
-
-    @brightness.setter
-    def brightness(self, val):
-        """ Sets the light brightness """
-
-        self._publish_command('brightness', {
-            'val': self.__fix_brightness(val)
-        })
-
-    def _update_state(self, state):
-        """ Update device state """
-
-        super(GoveeLight, self)._update_state(state)
-
-        self.__brightness = self.__fix_brightness(state['brightness'])
-
-
-class GoveeRgbLight(GoveeLight):
-    """ Represents a Govee RGB light of any type """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new abstract Govee RGB light device """
-
-        super(GoveeRgbLight, self).__init__(govee, identifier, topic, sku, name, connected)
-
-        self.__color = None
-        self.__color_temperature = None
-
-    def __fix_color_temperature(self, color_temperature):
-        fixed = 0
-        if color_temperature:
-            fixed = max(min(color_temperature, 9000), 2000)
-        return fixed
-
-    @property
-    def color(self):
-        """ Gets the light color  """
-
-        return self.__color
-
-    @color.setter
-    def color(self, val):
-        """ Sets the light color """
-
-        self._publish_command('color', {
-            'red': int(round(val.red * 255)),
-            'green': int(round(val.green * 255)),
-            'blue': int(round(val.blue * 255))
-        })
-
-    @property
-    def color_temperature(self):
-        """ Gets the light's color temperature  """
-
-        return self.__color_temperature
-
-    @color_temperature.setter
-    def color_temperature(self, val):
-        """ Sets the light's color temperature """
-
-        self._publish_command('colorTem', {
-            'val': self.__fix_color_temperature(val)
-        })
-
-    def _update_state(self, state):
-        """ Update device state """
-
-        super(GoveeRgbLight, self)._update_state(state)
-
-        if 'colorTemInKelvin' in state.keys():
-            self.__color_temperature = self.__fix_color_temperature(state['colorTemInKelvin'])
-        else:
-            self.__color_temperature = None
-
-        if 'color' in state.keys():
-            color = state['color']
-            self.__color = colour.Color(rgb = (color['r'] / 255.0, color['g'] / 255.0, color['b'] / 255.0))
-        else:
-            self.__color = None
-
-
-class GoveeWhiteBulb(GoveeLight):
-    """ Represents a Govee bulb """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee white bulb device """
-
-        super(GoveeWhiteBulb, self).__init__(govee, identifier, topic, sku, name, connected)
-
-
-class GoveeBulb(GoveeRgbLight):
-    """ Represents a Govee RGB bulb """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee RGB bulb device """
-
-        super(GoveeBulb, self).__init__(govee, identifier, topic, sku, name, connected)
-
-
-class GoveeLedStrip(GoveeRgbLight):
-    """ Represents a Govee LED strip """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee LED strip device """
-
-        super(GoveeLedStrip, self).__init__(govee, identifier, topic, sku, name, connected)
-
-
-class GoveeStringLight(GoveeRgbLight):
-    """ Represents a Govee string light """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee string light device """
-
-        super(GoveeStringLight, self).__init__(govee, identifier, topic, sku, name, connected)

@@ -25,5 +25,5 @@ deploy:
     secure: $PYPI_PASSWORD
   on:
     tags: true
-    repo: thomasreiser/govee-api
+    repo: thomasreiser/govee_api
     python: 3.8

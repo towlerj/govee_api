@@ -1,1 +1,1 @@
-"""Unit test package for govee-api."""
+"""Unit test package for govee_api."""

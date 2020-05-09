@@ -3,17 +3,17 @@ Govee API
 =========
 
 
-.. image:: https://img.shields.io/pypi/status/govee-api?label=PyPi
-        :target: https://pypi.org/project/govee-api
+.. image:: https://img.shields.io/pypi/status/govee_api?label=PyPi
+        :target: https://pypi.org/project/govee_api
 
-.. image:: https://img.shields.io/travis/thomasreiser/govee-api
-        :target: https://travis-ci.org/thomasreiser/govee-api
+.. image:: https://img.shields.io/travis/thomasreiser/govee_api
+        :target: https://travis-ci.org/thomasreiser/govee_api
 
-.. image:: https://readthedocs.org/projects/govee-api/badge/?version=latest
-        :target: https://govee-api.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/govee_api/badge/?version=latest
+        :target: https://govee_api.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://pyup.io/repos/github/thomasreiser/govee-api/shield.svg
-     :target: https://pyup.io/repos/github/thomasreiser/govee-api
+.. image:: https://pyup.io/repos/github/thomasreiser/govee_api/shield.svg
+     :target: https://pyup.io/repos/github/thomasreiser/govee_api
 
 
 
@@ -21,7 +21,7 @@ Simple and minimal Govee Home API client to control Govee smart devices.
 
 
 * Free software: Apache 2.0 License
-* Documentation: https://govee-api.readthedocs.io.
+* Documentation: https://govee_api.readthedocs.io.
 
 
 

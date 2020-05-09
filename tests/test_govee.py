@@ -4,7 +4,7 @@ import unittest
 from click.testing import CliRunner
 
 class TestGovee(unittest.TestCase):
-    """Tests for `govee-api` package."""
+    """Tests for `govee_api` package."""
 
     def setUp(self):
         """Set up test fixtures, if any."""
