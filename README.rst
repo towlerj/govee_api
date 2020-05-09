@@ -7,7 +7,7 @@ Govee API
         :target: https://pypi.python.org/pypi/govee-api
 
 .. image:: https://img.shields.io/travis/thomasreiser/govee-api.svg
-        :target: https://travis-ci.com/thomasreiser/govee-api
+        :target: https://travis-ci.org/thomasreiser/govee-api
 
 .. image:: https://readthedocs.org/projects/govee-api/badge/?version=latest
         :target: https://govee-api.readthedocs.io/en/latest/?badge=latest
@@ -20,7 +20,7 @@ Govee API
 
 
 
-Simple and minimal Govee Home API client
+Simple and minimal Govee Home API client to control Govee smart devices.
 
 
 * Free software: Apache 2.0 License
@@ -37,4 +37,18 @@ Features
 --------
 
 * Control Govee IOT smart devices (Bulbs, LED strips, Light string)
-* Currently no Bluetooth support, only HTTP/MQTT messaging is possible
+
+
+
+Not yet implemented
+--------
+
+* Bluetooth support
+* Detect which device is capable of IOT/MQTT control and which device requires Bluetooth control
+
+
+
+Usage
+--------
+
+See docs/usage.rst
