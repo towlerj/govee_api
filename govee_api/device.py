@@ -167,21 +167,21 @@ class GoveeLight(ToggleableGoveeDevice):
     def request_status(self):
         """ Request device status """
 
-        """
-        self._publish_command('status', {
-            'softversion': '1.02.17',
-            'wifiSoftVersion': '1.00.33',
-            'turn': 1,
-            'brightness':191,
-            'mode':2,
-            'timer':{
-                'enable':0,
-                'time':[{'openHour':18,'openMin':0,'closeHour':23,'closeMin':59}]
-            },
-            'color':{'red':255,'green':166,'blue':69},
-            'colorTemInKelvin':2500
-        })
-        """
+        #self._publish_command('status', {
+        #    'softversion': '1.02.17',
+        #    'wifiSoftVersion': '1.00.33',
+        #    'on': self.on,
+        #    'brightness': self.__brightness,
+        #    'mode': 2, # TODO ?!
+        #    'info1':{
+        #        'enable':0,
+        #        'openHour':0,
+        #        'openMin':0,
+        #        'closeHour':23,
+        #        'closeMin':59,
+        #        'repeat': -128
+        #    }
+        #})
 
     def _update_state(self, state):
         """ Update device state """
