@@ -64,6 +64,12 @@ class GoveeDevice(abc.ABC):
 
         return self.__connected
 
+    @abc.abstractmethod
+    def request_status(self):
+        """ Request device status """
+
+        pass    
+
     def _update_state(self, state):
         """ Update device state """
 
@@ -158,6 +164,25 @@ class GoveeLight(ToggleableGoveeDevice):
                 'val': brightness
             })
 
+    def request_status(self):
+        """ Request device status """
+
+        """
+        self._publish_command('status', {
+            'softversion': '1.02.17',
+            'wifiSoftVersion': '1.00.33',
+            'turn': 1,
+            'brightness':191,
+            'mode':2,
+            'timer':{
+                'enable':0,
+                'time':[{'openHour':18,'openMin':0,'closeHour':23,'closeMin':59}]
+            },
+            'color':{'red':255,'green':166,'blue':69},
+            'colorTemInKelvin':2500
+        })
+        """
+
     def _update_state(self, state):
         """ Update device state """
 
@@ -193,6 +218,15 @@ class GoveeRgbLight(GoveeLight):
     def color(self, val):
         """ Sets the light color """
 
+        red, green, blue = self._calc_color(val)
+
+        self._publish_command('color', {
+            'red': red,
+            'green': green,
+            'blue': blue
+        })
+
+    def _calc_color(self, val):
         red = 0
         green = 0
         blue = 0
@@ -214,11 +248,7 @@ class GoveeRgbLight(GoveeLight):
         else:
             raise gapi.GoveeException('Invalid color value provided')
         
-        self._publish_command('color', {
-            'red': red,
-            'green': green,
-            'blue': blue
-        })
+        return (red, green, blue)
 
     @property
     def color_temperature(self):
@@ -333,18 +363,3 @@ class GoveeLedStrip(GoveeRgbLight):
         """ Gets the devices' friendly name """
 
         return 'RGB LED strip'
-
-
-class GoveeStringLight(GoveeRgbLight):
-    """ Represents a Govee string light """
-
-    def __init__(self, govee, identifier, topic, sku, name, connected):
-        """ Creates a new Govee string light device """
-
-        super(GoveeStringLight, self).__init__(govee, identifier, topic, sku, name, connected)
-
-    @property
-    def friendly_name(self):
-        """ Gets the devices' friendly name """
-
-        return 'RGB string light'

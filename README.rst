@@ -33,7 +33,7 @@ pip install -r requirements_dev.txt
 Features
 --------
 
-* Control Govee IOT smart devices (Bulbs, LED strips, Light string)
+* Control Govee IOT smart devices (Bulbs, LED strips)
 
 
 
@@ -42,7 +42,7 @@ Not yet implemented
 
 * Bluetooth support
 * Detect which device is capable of IOT/MQTT control and which device requires Bluetooth control
-
+* String light support
 
 
 Usage

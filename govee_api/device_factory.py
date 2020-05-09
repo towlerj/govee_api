@@ -29,8 +29,10 @@ class _GoveeLedStripFactory(_AbstractGoveeDeviceFactory):
         return dev.GoveeLedStrip(govee, identifier, topic, sku, name, connected)
 
 
-class _GoveeStringLightFactory(_AbstractGoveeDeviceFactory):
-    """ Implement the operations to build Govee string light devices """
+#class _GoveeStringLightFactory(_AbstractGoveeDeviceFactory):
+#    """ Implement the operations to build Govee string light devices """
 
-    def build(self, govee, identifier, topic, sku, name, connected):
-        return dev.GoveeStringLight(govee, identifier, topic, sku, name, connected)
+#    def build(self, govee, identifier, topic, sku, name, connected):
+#        if sku == 'H7022':
+#            return dev.H7022GoveeStringLight(govee, identifier, topic, sku, name, connected)
+#        return None

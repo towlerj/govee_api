@@ -209,6 +209,19 @@ class Govee(object):
         Will raise events of type `on_new_device` for every new device found.
         """
 
+        # Update devices via HTTP request (basic device data - no status)
+        self.__http_update_device_list()
+
+        # Fetch status for each known device via MQTT
+        for dev in self.__devices.values():
+            dev.request_status()
+
+    def __http_update_device_list(self):
+        """
+        Get the list of devices assigned to the current account via HTTP and updates the internal device cache
+        as well. Will raise events of type `on_new_device` for every new device found.
+        """
+
         # Make sure we are (still) logged in
         self.__login_if_required()
 
@@ -284,8 +297,9 @@ class Govee(object):
                 else:
                     connected = None
                 device = device_factory.build(self, identifier, topic, sku, name, connected)
-                self.__devices[identifier] = device
-                self.on_new_device(self, device)
+                if device:
+                    self.__devices[identifier] = device
+                    self.on_new_device(self, device)
 
     def __get_device_factory(self, sku):
         """ Tries to determine the device factory based on the SKU """
@@ -300,8 +314,8 @@ class Govee(object):
             return dev_factory._GoveeBulbFactory()
         elif type_id == '61':
             return dev_factory._GoveeLedStripFactory()
-        elif type_id == '70':
-            return dev_factory._GoveeStringLightFactory()
+        #elif type_id == '70':
+        #    return dev_factory._GoveeStringLightFactory()
         else:
             return None
 
@@ -367,7 +381,7 @@ class Govee(object):
         # Get device
         device_identifer = state['device']
         if not device_identifer in self.__devices:
-            self.update_device_list()
+            self.__http_update_device_list()
             if not device_identifer in self.__devices:
                 return
         device = self.__devices[device_identifer]
@@ -378,7 +392,7 @@ class Govee(object):
 
     def _publish_payload(self, device, command, data):
         """ Publish message to device """
-        
+
         payload = {
             'msg': {
                 'accountTopic': self.__mqtt_topic,
