@@ -3,20 +3,17 @@ Govee API
 =========
 
 
-.. image:: https://img.shields.io/pypi/v/govee-api.svg
-        :target: https://pypi.python.org/pypi/govee-api
+.. image:: https://img.shields.io/pypi/status/govee-api?label=PyPi   :alt: PyPI - Status
 
-.. image:: https://img.shields.io/travis/thomasreiser/govee-api.svg
+.. image:: https://img.shields.io/travis/thomasreiser/govee-api
         :target: https://travis-ci.org/thomasreiser/govee-api
 
 .. image:: https://readthedocs.org/projects/govee-api/badge/?version=latest
         :target: https://govee-api.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-
 .. image:: https://pyup.io/repos/github/thomasreiser/govee-api/shield.svg
-     :target: https://pyup.io/repos/github/thomasreiser/govee-api/
-     :alt: Updates
+     :target: https://pyup.io/repos/github/thomasreiser/govee-api
 
 
 
