@@ -31,7 +31,7 @@ pip install -r requirements_dev.txt
 
 
 Message to Govee
---------
+----------------
 
 We all love your products but unfortunately  there is no public API. Thus, we cannot control the devices we have purchased
 in our own smart home environments. I have created this library so that I can control my devices easily without the Govee
@@ -49,7 +49,7 @@ Features
 
 
 Approved device support
---------
+-----------------------
 
 +------------+----------------+
 | Device SKU | Approved since |
@@ -69,7 +69,7 @@ In case something did not work, please provide me the RAW JSON data received via
 
 
 Not yet implemented
---------
+-------------------
 
 * Bluetooth support
 * Detect which device is capable of IOT/MQTT control and which device requires Bluetooth control
@@ -78,6 +78,6 @@ Not yet implemented
 
 
 Usage
---------
+-----
 
 See **docs/usage.rst** or **testclient.py**
