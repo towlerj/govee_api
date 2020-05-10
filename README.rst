@@ -68,4 +68,4 @@ Not yet implemented
 Usage
 --------
 
-See docs/usage.rst
+See **docs/usage.rst** or **testclient.py**
