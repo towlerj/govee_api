@@ -30,6 +30,17 @@ pip install -r requirements_dev.txt
 
 
 
+Message to Govee
+--------
+
+We all love your products but unfortunately  there is no public API. Thus, we cannot control the devices we have purchased
+in our own smart home environments. I have created this library so that I can control my devices easily without the Govee
+app and to help others doing this. Nobody wants to harm you, your server infrastructure or anything or anybody else. In case
+you cannot accept my code to be public, please send me an e-mail to reiser.thomas@gmail.com and I will immediately shut down
+this repository and will delete all artifacts from PyPi.
+
+
+
 Features
 --------
 
@@ -63,6 +74,7 @@ Not yet implemented
 * Bluetooth support
 * Detect which device is capable of IOT/MQTT control and which device requires Bluetooth control
 * String light support
+
 
 
 Usage
