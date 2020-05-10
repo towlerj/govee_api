@@ -37,6 +37,26 @@ Features
 
 
 
+Approved device support
+--------
+
++------------+----------------+
+| Device SKU | Approved since |
++============+================+
+| Bulbs                       |
++------------+----------------+
+| LED strips                  |
++------------+----------------+
+| H6159      | 1.0.0          |
++------------+----------------+
+| H6163      | 1.0.0          |
++------------+----------------+
+
+Please test your own devices with the API and tell me the results!
+In case something did not work, please provide me the RAW JSON data received via the **new device** + **device update** events.
+
+
+
 Not yet implemented
 --------
 

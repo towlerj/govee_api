@@ -107,7 +107,7 @@ class Govee(object):
 
         return int(round(time.time() * 1000))
 
-    def __empty_event_handler(self, govee, device):
+    def __empty_event_handler(self, govee, device, raw_data):
         """ Empty event handler that should be overwritten by the client """
 
         pass
@@ -299,7 +299,7 @@ class Govee(object):
                 device = device_factory.build(self, identifier, topic, sku, name, connected)
                 if device:
                     self.__devices[identifier] = device
-                    self.on_new_device(self, device)
+                    self.on_new_device(self, device, raw_device)
 
     def __get_device_factory(self, sku):
         """ Tries to determine the device factory based on the SKU """
@@ -388,7 +388,7 @@ class Govee(object):
 
         # Update device status
         device._update_state(state)
-        self.on_device_update(self, device)
+        self.on_device_update(self, device, raw_json)
 
     def _publish_payload(self, device, command, data):
         """ Publish message to device """

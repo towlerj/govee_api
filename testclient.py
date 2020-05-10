@@ -20,7 +20,7 @@ def main():
     # Print out the used client ID
     print('Current client ID is: {}'.format(govee_cli.client_id))
 
-    # Fetch known devices from server.
+    # Fetch known devices from server
     govee_cli.update_device_list()
 
     print('Preparing for action :-)')
@@ -102,14 +102,14 @@ def main():
 
 
 # Event handlers
-def _on_new_device(govee_cli, dev):
+def _on_new_device(govee_cli, dev, raw_data):
     """ New device event """
 
     connected_str = _get_connected_str(dev.connected)
     print('NEW DEVICE [{}][{} {}] {} -> Connected: {}'.format(dev.identifier, dev.sku, dev.friendly_name, dev.name, \
          connected_str))
 
-def _on_device_update(govee_cli, dev):
+def _on_device_update(govee_cli, dev, raw_data):
     """ Device update event """
 
     connected_str = _get_connected_str(dev.connected)
