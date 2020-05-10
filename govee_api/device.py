@@ -275,7 +275,7 @@ class GoveeRgbLight(GoveeLight):
         https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html
         """
 
-        # Minimum temperature is 1000, maxiumum temperature is 40000
+        # Minimum temperature is 1000, maximum temperature is 40000
         color_temp = min(max(color_temperature, 1000), 40000) / 100
 
         # Calculate red
