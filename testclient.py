@@ -24,7 +24,8 @@ def main():
     govee_cli.update_device_list()
 
     print('Preparing for action :-)')
-    time.sleep(1)
+    # Don't do this in real life. Use the callbacks the client provides to you!
+    time.sleep(10)
 
     # Loop over all devices
     for dev in govee_cli.devices.values():
@@ -41,13 +42,13 @@ def main():
             brightness_backup = dev.brightness
 
             # Set brightness to 50%
-            dev.brightness = 128
+            dev.brightness = 0.5
 
             # Wait a second
             time.sleep(1)
 
             # Set brightness to 100%
-            dev.brightness = 255
+            dev.brightness = 1.0
 
             # Wait a second
             time.sleep(1)
@@ -69,7 +70,7 @@ def main():
                 time.sleep(1)
 
                 # Set color to red
-                dev.color = colour.Color('red')
+                dev.color = (255, 0, 0)
 
                 # Wait a second
                 time.sleep(1)
@@ -109,7 +110,7 @@ def _on_new_device(govee_cli, dev, raw_data):
     print('NEW DEVICE [{}][{} {}] {} -> Connected: {}'.format(dev.identifier, dev.sku, dev.friendly_name, dev.name, \
          connected_str))
 
-def _on_device_update(govee_cli, dev, raw_data):
+def _on_device_update(govee_cli, dev, old_dev, raw_data):
     """ Device update event """
 
     connected_str = _get_connected_str(dev.connected)

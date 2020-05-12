@@ -33,7 +33,7 @@ pip install -r requirements_dev.txt
 Message to Govee
 ----------------
 
-We all love your products but unfortunately  there is no public API. Thus, we cannot control the devices we have purchased
+We all love your products but unfortunately there is no public API. Thus, we cannot control the devices we have purchased
 in our own smart home environments. I have created this library so that I can control my devices easily without the Govee
 app and to help others doing this. Nobody wants to harm you, your server infrastructure or anything or anybody else. In case
 you cannot accept my code to be public, please send me an e-mail to reiser.thomas@gmail.com and I will immediately shut down
@@ -56,11 +56,17 @@ Approved device support
 +============+================+
 | Bulbs                       |
 +------------+----------------+
+| -none yet-                  |
++------------+----------------+
 | LED strips                  |
 +------------+----------------+
 | H6159      | 1.0.0          |
 +------------+----------------+
 | H6163      | 1.0.0          |
++------------+----------------+
+| String lights               |
++------------+----------------+
+| -none yet-                  |
 +------------+----------------+
 
 Please test your own devices with the API and tell me the results!

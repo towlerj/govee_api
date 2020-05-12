@@ -142,11 +142,11 @@ class GoveeLight(ToggleableGoveeDevice):
 
         self.__brightness = None
 
-    def __fix_brightness(self, brightness):
-        fixed = 0
+    def __calc_brightness(self, brightness):
+        val = 0
         if brightness:
-            fixed = max(min(brightness, 255), 0)
-        return fixed
+            val = max(min(int(round(brightness * 255)), 255), 0)
+        return val
 
     @property
     def brightness(self):
@@ -158,37 +158,26 @@ class GoveeLight(ToggleableGoveeDevice):
     def brightness(self, val):
         """ Sets the light brightness """
 
-        brightness = self.__fix_brightness(val)
-        if brightness != self.__brightness:
+        if val != self.__brightness:
             self._publish_command('brightness', {
-                'val': brightness
+                'val': self.__calc_brightness(val)
             })
 
     def request_status(self):
         """ Request device status """
 
-        #self._publish_command('status', {
-        #    'softversion': '1.02.17',
-        #    'wifiSoftVersion': '1.00.33',
-        #    'on': self.on,
-        #    'brightness': self.__brightness,
-        #    'mode': 2, # TODO ?!
-        #    'info1':{
-        #        'enable':0,
-        #        'openHour':0,
-        #        'openMin':0,
-        #        'closeHour':23,
-        #        'closeMin':59,
-        #        'repeat': -128
-        #    }
-        #})
+        # I have found out that I can fetch the status of the devices by sending an empty
+        # (=no data) `turn` command to them. I do not know how the official app does it and
+        # I don't want to decompile it for legal reasons.
+
+        self._publish_command('turn', {})
 
     def _update_state(self, state):
         """ Update device state """
 
         super(GoveeLight, self)._update_state(state)
 
-        self.__brightness = self.__fix_brightness(state['brightness'])
+        self.__brightness = max(min(state['brightness'] / 255, 1.0), 0.0)
 
 
 class GoveeRgbLight(GoveeLight):
@@ -218,13 +207,14 @@ class GoveeRgbLight(GoveeLight):
     def color(self, val):
         """ Sets the light color """
 
-        red, green, blue = self._calc_color(val)
+        if val:
+            red, green, blue = self._calc_color(val)
 
-        self._publish_command('color', {
-            'red': red,
-            'green': green,
-            'blue': blue
-        })
+            self._publish_command('color', {
+                'red': red,
+                'green': green,
+                'blue': blue
+            })
 
     def _calc_color(self, val):
         red = 0
@@ -244,7 +234,7 @@ class GoveeRgbLight(GoveeLight):
                 return
             red = val[0]
             green = val[1]
-            blue = val[3]
+            blue = val[2]
         else:
             raise gapi.GoveeException('Invalid color value provided')
         
@@ -261,7 +251,7 @@ class GoveeRgbLight(GoveeLight):
         """ Sets the light's color temperature """
 
         color_temp = self.__fix_color_temperature(val)
-        if color_temp != self.__color_temperature:
+        if color_temp > 0 and color_temp != self.__color_temperature:
             self._publish_command('colorTem', {
                 'color': self.__kelvin_to_color(color_temp),
                 'colorTemInKelvin': color_temp
