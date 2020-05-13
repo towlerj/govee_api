@@ -26,11 +26,12 @@ To use Govee API in a project::
         # Print out the used client ID
         print('Current client ID is: {}'.format(govee_cli.client_id))
 
-        # Fetch known devices from server.
+        # Fetch known devices from server
         govee_cli.update_device_list()
 
         print('Preparing for action :-)')
-        time.sleep(1)
+        # Don't do this in real life. Use the callbacks the client provides to you!
+        time.sleep(10)
 
         # Loop over all devices
         for dev in govee_cli.devices.values():
@@ -47,13 +48,13 @@ To use Govee API in a project::
                 brightness_backup = dev.brightness
 
                 # Set brightness to 50%
-                dev.brightness = 128
+                dev.brightness = 0.5
 
                 # Wait a second
                 time.sleep(1)
 
                 # Set brightness to 100%
-                dev.brightness = 255
+                dev.brightness = 1.0
 
                 # Wait a second
                 time.sleep(1)
@@ -75,7 +76,7 @@ To use Govee API in a project::
                     time.sleep(1)
 
                     # Set color to red
-                    dev.color = colour.Color('red')
+                    dev.color = (255, 0, 0)
 
                     # Wait a second
                     time.sleep(1)
@@ -108,14 +109,14 @@ To use Govee API in a project::
 
 
     # Event handlers
-    def _on_new_device(govee_cli, dev):
+    def _on_new_device(govee_cli, dev, raw_data):
         """ New device event """
 
         connected_str = _get_connected_str(dev.connected)
         print('NEW DEVICE [{}][{} {}] {} -> Connected: {}'.format(dev.identifier, dev.sku, dev.friendly_name, dev.name, \
             connected_str))
 
-    def _on_device_update(govee_cli, dev):
+    def _on_device_update(govee_cli, dev, old_dev, raw_data):
         """ Device update event """
 
         connected_str = _get_connected_str(dev.connected)
