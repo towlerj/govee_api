@@ -3,7 +3,8 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE.rst
 include README.rst
-include govee/keystore/*.cert
+include govee/keystore/*.pem
+include govee/keystore/*.pkey
 
 recursive-include tests *
 recursive-exclude * __pycache__
