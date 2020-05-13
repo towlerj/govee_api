@@ -2,7 +2,7 @@
 History
 =======
 
-1.1.1 (2020-05-13)
+1.2.0 (2020-05-13)
 ------------------
 
 * Fix PyPi deployment (IoT certificates were missing)
